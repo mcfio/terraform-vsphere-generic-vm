@@ -1,5 +1,32 @@
+variable "datacenter_name" {
+  type    = string
+  default = "Milton"
+}
+
+variable "cluster_name" {
+  type    = string
+  default = "cluster-01"
+}
+
+variable "resource_pool" {
+  description = ""
+  default     = null
+}
+
+variable "folder" {
+  description = "sets the vm folder"
+  type    = string
+  default = null
+}
+
 variable "name" {
   type = string
+}
+
+variable "firmware" {
+  description = "set the firmware type to either bios or efi"
+  type = string
+  default = "efi"
 }
 
 variable "cpus" {
@@ -31,29 +58,19 @@ variable "memory_hot_add_enabled" {
   default = null
 }
 
-variable "datacenter_name" {
-  type    = string
-  default = "Milton"
-}
-
-variable "cluster_name" {
-  type    = string
-  default = "cluster-01"
-}
-
-variable "resource_pool" {
-  description = ""
-  default = null
-}
-
-variable "folder" {
-  type    = string
-  default = null
-}
-
 variable "network_name" {
   type    = string
   default = "VM Network"
+}
+
+variable "disk_label" {
+  type    = list(any)
+  default = []
+}
+
+variable "disk_size_gb" {
+  type        = list(any)
+  default     = null
 }
 
 variable "datastore_name" {
@@ -63,7 +80,7 @@ variable "datastore_name" {
 
 variable "content_library_name" {
   type    = string
-  default = "OS Image Library"
+  default = "os-images"
 }
 
 variable "os_image_name" {
@@ -78,12 +95,6 @@ variable "vapp_properties" {
 
 variable "tags" {
   description = "The names of any tags to attach to this resource. They must already exist."
-  type        = map(any)
-  default     = null
-}
-
-variable "tag_ids" {
-  description = "The ids of any tags to attach to this resource. They must already exist."
   type        = list(any)
   default     = null
 }

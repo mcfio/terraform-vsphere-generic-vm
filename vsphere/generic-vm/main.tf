@@ -2,11 +2,11 @@ resource "vsphere_virtual_machine" "generic" {
   name             = var.name
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   folder           = var.folder
-  tags             = var.tag_ids != null ? var.tag_ids : data.vsphere_tag.tag[*].id
+  tags             = var.tags
 
   datastore_id = data.vsphere_datastore.datastore.id
 
-  firmware               = "efi"
+  firmware               = var.firmware
   num_cpus               = var.cpus
   memory                 = var.memory
   memory_reservation     = var.memory_reservation
@@ -22,11 +22,16 @@ resource "vsphere_virtual_machine" "generic" {
     network_id = data.vsphere_network.network.id
   }
 
-  disk {
-    label            = "disk0"
-    unit_number      = 0
-    size             = 10
-    thin_provisioned = true
+  # disk configuration for content_library item, not as robust as templates
+  dynamic "disk" {
+    for_each = var.content_library_name == null ? [] : [1]
+    iterator = disk
+    content {
+      label            = length(var.disk_label) > 0 ? var.disk_label[disk.key] : "disk${disk.key}"
+      size             = var.disk_size_gb[disk.key]
+      unit_number      = 0
+      thin_provisioned = true
+    }
   }
 
   clone {
@@ -40,7 +45,8 @@ resource "vsphere_virtual_machine" "generic" {
   lifecycle {
     ignore_changes = [
       vapp,
-      host_system_id
+      host_system_id,
+      disk
     ]
   }
 }

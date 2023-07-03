@@ -26,15 +26,3 @@ data "vsphere_datastore" "datastore" {
   name          = var.datastore_name
   datacenter_id = data.vsphere_datacenter.datacenter.id
 }
-
-data "vsphere_tag_category" "category" {
-  count = var.tags != null ? length(var.tags) : 0
-  name  = keys(var.tags)[count.index]
-}
-
-data "vsphere_tag" "tag" {
-  count       = var.tags != null ? length(var.tags) : 0
-  name        = var.tags[keys(var.tags)[count.index]]
-  category_id = data.vsphere_tag_category.category[count.index].id
-}
-
