@@ -44,6 +44,7 @@ resource "vsphere_virtual_machine" "generic" {
 
   lifecycle {
     ignore_changes = [
+      clone,
       vapp,
       host_system_id,
       disk
