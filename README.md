@@ -1,1 +1,1 @@
-# terraform-modules
+# terraform-vsphere-generic-vm
