@@ -46,8 +46,9 @@ variable "memory" {
 
 variable "memory_reservation" {
   type    = number
-  default = null
+  default = var.memory >= 1024 ? var.memory : (var.memory / 2)
 }
+
 variable "memory_share_level" {
   type    = string
   default = "normal"
