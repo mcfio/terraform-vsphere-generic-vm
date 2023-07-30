@@ -1,15 +1,15 @@
 resource "vsphere_virtual_machine" "generic" {
   name             = var.name
-  resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
+  resource_pool_id = length(var.resource_pool_name) == 0 ? data.vsphere_compute_cluster.vm.resource_pool_id : var.resource_pool_name
   folder           = var.folder
   tags             = var.tags
 
-  datastore_id = data.vsphere_datastore.datastore.id
+  datastore_id = data.vsphere_datastore.vm.id
 
   firmware               = var.firmware
   num_cpus               = var.cpus
   memory                 = var.memory
-  memory_reservation     = var.memory_reservation
+  memory_reservation     = var.memory_reservation == "" ? (var.memory / 2) : (var.memory_reservation)
   memory_share_level     = var.memory_share_level
   enable_disk_uuid       = true
   cpu_hot_add_enabled    = var.cpu_hot_add_enabled
@@ -19,7 +19,7 @@ resource "vsphere_virtual_machine" "generic" {
   wait_for_guest_ip_timeout  = 0
 
   network_interface {
-    network_id = data.vsphere_network.network.id
+    network_id = data.vsphere_network.vm.id
   }
 
   # disk configuration for content_library item, not as robust as templates
@@ -35,7 +35,7 @@ resource "vsphere_virtual_machine" "generic" {
   }
 
   clone {
-    template_uuid = data.vsphere_content_library_item.item.id
+    template_uuid = data.vsphere_content_library_item.vm.id
   }
 
   vapp {

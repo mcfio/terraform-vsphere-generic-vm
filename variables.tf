@@ -1,6 +1,12 @@
+variable "name" {
+  description = "Name of the vSphere Virtual Machine"
+  type        = string
+}
+
 variable "datacenter_name" {
-  type    = string
-  default = "Milton"
+  description = "vSphere Datacenter in which to place the VM"
+  type        = string
+  default     = "Milton"
 }
 
 variable "cluster_name" {
@@ -8,25 +14,22 @@ variable "cluster_name" {
   default = "cluster-01"
 }
 
-variable "resource_pool" {
-  description = ""
-  default     = null
+variable "resource_pool_name" {
+  description = "vSphere Resource Pool, cluster default pool selected when unspecified"
+  type        = string
+  default     = ""
 }
 
 variable "folder" {
   description = "sets the vm folder"
-  type    = string
-  default = null
-}
-
-variable "name" {
-  type = string
+  type        = string
+  default     = null
 }
 
 variable "firmware" {
   description = "set the firmware type to either bios or efi"
-  type = string
-  default = "efi"
+  type        = string
+  default     = "efi"
 }
 
 variable "cpus" {
@@ -46,7 +49,7 @@ variable "memory" {
 
 variable "memory_reservation" {
   type    = number
-  default = var.memory >= 1024 ? var.memory : (var.memory / 2)
+  default = null
 }
 
 variable "memory_share_level" {
@@ -70,8 +73,8 @@ variable "disk_label" {
 }
 
 variable "disk_size_gb" {
-  type        = list(any)
-  default     = null
+  type    = list(any)
+  default = null
 }
 
 variable "datastore_name" {
